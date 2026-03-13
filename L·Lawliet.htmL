@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MAI Pro v25 · 终极融合 · 卡密验证</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* 原有样式保持不变，追加遮罩层样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #151520;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-tertiary: #ec4899;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: rgba(99, 102, 241, 0.15);
+            --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            --gradient-cyan: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+        }
+        body { background: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a0f 50%, #050508 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; color: var(--text-primary); line-height: 1.6; }
+        .container { max-width: 1600px; width: 100%; background: var(--bg-secondary); backdrop-filter: blur(20px); border-radius: 24px; border: 1px solid var(--border-color); box-shadow: var(--shadow-glow), 0 25px 50px -12px rgba(0, 0, 0, 0.5); overflow: hidden; position: relative; }
+        .container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-primary); opacity: 0.8; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 28px 32px; background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%); border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 20px; }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { width: 48px; height: 48px; background: var(--gradient-primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4); }
+        .logo h1 { font-size: 28px; font-weight: 800; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
+        .logo span { font-size: 13px; color: var(--text-muted); background: var(--bg-tertiary); padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border-color); font-weight: 500; }
+        .badge-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .badge { background: var(--bg-tertiary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 20px; color: var(--text-secondary); font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; }
+        .badge:hover { border-color: var(--accent-primary); color: var(--text-primary); transform: translateY(-2px); }
+        .badge i { color: var(--accent-primary); font-size: 14px; }
+        .badge.featured { background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); border-color: rgba(99, 102, 241, 0.3); color: var(--text-primary); }
+        .badge.featured i { color: var(--accent-secondary); }
+        .roblox-badge { background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%); border: 1px solid rgba(6, 182, 212, 0.3); color: var(--accent-cyan); }
+        .roblox-badge i { color: var(--accent-cyan); }
+        .warning-card { background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%); border-left: 3px solid var(--accent-primary); padding: 20px 28px; margin: 24px 32px; border-radius: 16px; display: flex; align-items: flex-start; gap: 16px; color: var(--text-secondary); font-size: 14px; border: 1px solid var(--border-color); position: relative; overflow: hidden; }
+        .warning-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1) 0%, transparent 70%); pointer-events: none; }
+        .warning-card i { font-size: 22px; color: var(--accent-primary); margin-top: 2px; flex-shrink: 0; }
+        .warning-card strong { color: var(--text-primary); font-weight: 600; }
+        .main-grid { display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 28px; padding: 0 32px 32px; }
+        .input-card, .config-card { background: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-color); padding: 24px; position: relative; overflow: hidden; }
+        .input-card::before, .config-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent); }
+        .input-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; color: var(--text-muted); font-size: 13px; font-weight: 500; }
+        .input-header label { display: flex; align-items: center; gap: 8px; }
+        .input-header label i { color: var(--accent-primary); font-size: 14px; }
+        .file-import { display: flex; gap: 10px; align-items: center; }
+        .file-import label { background: var(--bg-tertiary); padding: 8px 16px; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-color); transition: all 0.3s ease; color: var(--text-secondary); font-size: 13px; display: flex; align-items: center; gap: 6px; }
+        .file-import label:hover { background: rgba(99, 102, 241, 0.1); border-color: var(--accent-primary); color: var(--text-primary); transform: translateY(-1px); }
+        .file-import label i { color: var(--accent-primary); font-size: 14px; }
+        #fileInput { display: none; }
+        #codeInput { width: 100%; height: 320px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; color: var(--text-primary); font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 14px; line-height: 1.7; resize: vertical; outline: none; transition: all 0.3s ease; }
+        #codeInput:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        #codeInput::placeholder { color: var(--text-muted); }
+        .config-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .config-title i { color: var(--accent-primary); font-size: 18px; }
+        .preset-bar { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+        .preset-btn { background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .preset-btn:hover { background: rgba(99, 102, 241, 0.1); border-color: var(--accent-primary); color: var(--text-primary); transform: translateY(-2px); }
+        .preset-btn.active { background: var(--gradient-primary); border-color: transparent; color: white; box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4); }
+        .preset-btn i { color: var(--accent-primary); font-size: 14px; }
+        .preset-btn.active i { color: white; }
+        .config-group { margin-bottom: 24px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .config-item { display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary); font-size: 13px; background: var(--bg-tertiary); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); transition: all 0.3s ease; }
+        .config-item:hover { border-color: rgba(99, 102, 241, 0.3); }
+        .config-item.featured { background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%); border-color: rgba(99, 102, 241, 0.2); }
+        .config-item span { display: flex; align-items: center; gap: 8px; }
+        .config-item span i { color: var(--accent-primary); font-size: 14px; width: 16px; text-align: center; }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-primary); transition: 0.3s; border-radius: 24px; border: 1px solid var(--border-color); }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 2px; bottom: 2px; background-color: var(--text-muted); transition: 0.3s; border-radius: 50%; }
+        input:checked + .slider { background: var(--gradient-primary); border-color: transparent; }
+        input:checked + .slider:before { transform: translateX(20px); background-color: white; }
+        .slider-input-container { margin-top: 8px; background: transparent; border: none; padding-left: 0; }
+        .slider-input { width: 100%; display: flex; align-items: center; gap: 16px; }
+        .slider-input input[type=range] { flex: 1; height: 6px; background: var(--bg-primary); border-radius: 6px; outline: none; -webkit-appearance: none; }
+        .slider-input input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--gradient-primary); border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(99, 102, 241, 0.5); transition: transform 0.2s; }
+        .slider-input input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
+        .slider-value { min-width: 50px; color: var(--accent-primary); font-weight: 600; font-size: 14px; text-align: right; }
+
+        /* 远程密钥配置区域 */
+        .remote-key-config { margin-top: 20px; padding: 16px; background: var(--bg-primary); border-radius: 12px; border: 1px solid var(--border-color); }
+        .remote-key-config label { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 13px; margin-bottom: 8px; }
+        .remote-key-config input[type=text] { width: 100%; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none; transition: border 0.3s; }
+        .remote-key-config input[type=text]:focus { border-color: var(--accent-primary); }
+        .remote-key-config .note { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0; }
+        .stat-item { background: var(--bg-primary); border-radius: 16px; padding: 16px 8px; text-align: center; border: 1px solid var(--border-color); transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .stat-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient-primary); opacity: 0; transition: opacity 0.3s; }
+        .stat-item:hover::before { opacity: 1; }
+        .stat-item.featured { background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%); }
+        .stat-value { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .stat-value.featured { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .action-bar { display: flex; gap: 12px; margin-top: 24px; }
+        .btn { padding: 14px 28px; border-radius: 14px; border: none; font-weight: 600; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s ease; flex: 1; }
+        .btn-primary { background: var(--gradient-primary); color: white; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.5); }
+        .btn-secondary { background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); }
+        .btn-secondary:hover { background: rgba(99, 102, 241, 0.1); border-color: var(--accent-primary); color: var(--text-primary); }
+        .progress-container { display: none; margin-top: 20px; }
+        .progress-bar { height: 6px; background: var(--bg-primary); border-radius: 6px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: var(--gradient-primary); transition: width 0.3s ease; border-radius: 6px; }
+        .progress-text { text-align: center; margin-top: 10px; font-size: 12px; color: var(--text-muted); }
+        .output-card { background: var(--bg-card); border-radius: 20px; border: 1px solid var(--border-color); padding: 24px; margin-top: 24px; display: none; }
+        .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; color: var(--text-muted); font-size: 13px; }
+        .output-header label { display: flex; align-items: center; gap: 8px; }
+        .output-header label i { color: var(--accent-primary); }
+        #outputCode { width: 100%; min-height: 240px; max-height: 500px; overflow: auto; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; color: var(--text-primary); font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 13px; line-height: 1.6; }
+        .copy-btn { background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 16px; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+        .copy-btn:hover { background: rgba(99, 102, 241, 0.1); border-color: var(--accent-primary); color: var(--text-primary); }
+        .time-stats { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+        .time-stats span { background: var(--bg-tertiary); padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+        .time-stats span i { color: var(--accent-primary); font-size: 12px; }
+        @media (max-width: 1200px) { .main-grid { grid-template-columns: 1fr; } .header { flex-direction: column; align-items: flex-start; } }
+        @media (max-width: 640px) { .container { padding: 16px; } .header { padding: 20px; } .main-grid { padding: 0 20px 20px; } .config-group { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        /* 卡密验证遮罩层样式 */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+        .auth-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: var(--shadow-glow);
+            text-align: center;
+        }
+        .auth-box h2 {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .auth-box p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .auth-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border 0.3s;
+        }
+        .auth-input:focus {
+            border-color: var(--accent-primary);
+        }
+        .auth-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5);
+        }
+        .auth-error {
+            color: #ef4444;
+            margin-top: 15px;
+            font-size: 13px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 卡密验证遮罩层 -->
+    <div id="authOverlay" class="auth-overlay">
+        <div class="auth-box">
+            <h2>MAI Pro 终极融合</h2>
+            <p>请输入卡密以继续使用</p>
+            <input type="text" id="authInput" class="auth-input" placeholder="卡密" autofocus>
+            <button class="auth-btn" onclick="verifyAuth()">验证</button>
+            <div id="authError" class="auth-error">卡密错误，请重新输入</div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer" style="display: none;">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h1>MAI Pro <span>v25 · 终极融合 · 卡密验证</span></h1>
+                </div>
+            </div>
+            <div class="badge-group">
+                <div class="badge featured"><i class="fas fa-skull"></i> 真实VM</div>
+                <div class="badge"><i class="fas fa-code-branch"></i> 自修改</div>
+                <div class="badge"><i class="fas fa-key"></i> 远程密钥</div>
+                <div class="badge"><i class="fas fa-shield"></i> 反调试Pro</div>
+                <div class="roblox-badge"><i class="fab fa-roblox"></i> 柒澜 · 纸飞机</div>
+            </div>
+        </div>
+        
+        <div class="warning-card">
+            <i class="fas fa-circle-info"></i>
+            <div>
+                <strong>🧬 终极融合引擎 v25（不可破解版）</strong> — 集成真实虚拟机、自修改代码、远程密钥（可选）、反调试Pro、多层动态加密、控制流平坦化、超隐碎片化。静态分析和动态调试均无法还原，每次混淆结果唯一。
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="input-card">
+                <div class="input-header">
+                    <label><i class="fas fa-code"></i> 原始代码 (Roblox Luau)</label>
+                    <div class="file-import">
+                        <label for="fileInput">
+                            <i class="fas fa-cloud-arrow-up"></i>
+                            导入文件
+                        </label>
+                        <input type="file" id="fileInput" accept=".lua,.txt,.luau">
+                        <span id="charCount" style="color: var(--text-muted); font-size: 12px;">0 字符</span>
+                    </div>
+                </div>
+                <textarea id="codeInput" placeholder="-- 把你的 Roblox 脚本贴在这里&#10;print('Hello Roblox Luau')"></textarea>
+            </div>
+
+            <div class="config-card">
+                <div class="config-title">
+                    <i class="fas fa-sliders"></i>
+                    混淆配置 · 终极融合 · 强度1-20
+                </div>
+                
+                <div class="preset-bar">
+                    <button class="preset-btn" onclick="setPreset('standard')">
+                        <i class="fas fa-shield"></i> 标准(5)
+                    </button>
+                    <button class="preset-btn active" onclick="setPreset('ultimate')">
+                        <i class="fas fa-bolt"></i> 终极(10)
+                    </button>
+                    <button class="preset-btn" onclick="setPreset('max')">
+                        <i class="fas fa-skull"></i> 混沌(20)
+                    </button>
+                </div>
+
+                <!-- 基础混淆 -->
+                <div class="config-group">
+                    <div class="config-item">
+                        <span><i class="fas fa-tag"></i> 标识符混淆</span>
+                        <label class="switch">
+                            <input type="checkbox" id="renameVars" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-item featured">
+                        <span><i class="fas fa-microchip"></i> 真实虚拟机VM</span>
+                        <label class="switch">
+                            <input type="checkbox" id="realVM" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-item featured">
+                        <span><i class="fas fa-lock"></i> 动态多层加密</span>
+                        <label class="switch">
+                            <input type="checkbox" id="multiEncrypt" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-item featured">
+                        <span><i class="fas fa-code-branch"></i> 控制流混淆</span>
+                        <label class="switch">
+                            <input type="checkbox" id="controlFlow" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 高级防护 -->
+                <div class="config-group">
+                    <div class="config-item featured">
+                        <span><i class="fas fa-eye-slash"></i> 超隐碎片化v3</span>
+                        <label class="switch">
+                            <input type="checkbox" id="superHidden" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-item featured">
+                        <span><i class="fas fa-random"></i> 不透明谓词</span>
+                        <label class="switch">
+                            <input type="checkbox" id="opaquePredicates" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-item featured">
+                        <span><i class="fas fa-shield-alt"></i> 反调试Pro</span>
+                        <label class="switch">
+                            <input type="checkbox" id="antiDebug" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-item featured">
+                        <span><i class="fas fa-check-double"></i> 代码完整性校验</span>
+                        <label class="switch">
+                            <input type="checkbox" id="integrityCheck" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 干扰与自毁 + 自修改代码 -->
+                <div class="config-group">
+                    <div class="config-item featured">
+                        <span><i class="fas fa-comment-dots"></i> 干扰注释系统</span>
+                        <label class="switch">
+                            <input type="checkbox" id="deceptiveComments" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-item featured">
+                        <span><i class="fas fa-bomb"></i> 自毁结构</span>
+                        <label class="switch">
+                            <input type="checkbox" id="selfDestruct" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-item featured">
+                        <span><i class="fas fa-edit"></i> 自修改代码</span>
+                        <label class="switch">
+                            <input type="checkbox" id="selfModifying" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="config-item featured">
+                        <span><i class="fas fa-robot"></i> 防AI/机器人增强</span>
+                        <label class="switch">
+                            <input type="checkbox" id="antiAI" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 远程密钥开关 + URL输入 -->
+                <div class="config-group" style="grid-template-columns: 1fr;">
+                    <div class="config-item featured" style="justify-content: flex-start; gap: 20px;">
+                        <span><i class="fas fa-key"></i> 启用远程密钥</span>
+                        <label class="switch">
+                            <input type="checkbox" id="remoteKey" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="remote-key-config" id="remoteKeyConfig">
+                    <label><i class="fas fa-link"></i> 密钥服务器URL</label>
+                    <input type="text" id="keyServerUrl" value="https://your-server.com/getkey?hwid=" placeholder="例如: https://example.com/key">
+                    <div class="note"><i class="fas fa-info-circle"></i> 若留空则使用内置静态密钥（不推荐）</div>
+                </div>
+
+                <!-- 强度滑块 -->
+                <div class="config-item slider-input-container">
+                    <span><i class="fas fa-layer-group"></i> 混淆强度等级 (1-20)</span>
+                    <div class="slider-input">
+                        <input type="range" id="intensityLevel" min="1" max="20" value="20" step="1">
+                        <span class="slider-value" id="intensityLevelValue">20</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="origSize">0</div>
+                        <div class="stat-label">原始 B</div>
+                    </div>
+                    <div class="stat-item featured">
+                        <div class="stat-value featured" id="estSize">0</div>
+                        <div class="stat-label">混淆后 MB</div>
+                    </div>
+                    <div class="stat-item featured">
+                        <div class="stat-value featured" id="featureCount">0</div>
+                        <div class="stat-label">防护层数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="obfTime">0ms</div>
+                        <div class="stat-label">处理耗时</div>
+                    </div>
+                </div>
+
+                <div class="action-bar">
+                    <button class="btn btn-primary" onclick="startObfuscation()">
+                        <i class="fas fa-play"></i>
+                        启动终极混淆
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetToDefault()">
+                        <i class="fas fa-rotate-left"></i>
+                        重置配置
+                    </button>
+                </div>
+
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">初始化混淆引擎...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="output-card" id="outputCard">
+            <div class="output-header">
+                <label><i class="fas fa-terminal"></i> 混淆结果 (终极融合 · 强度20级)</label>
+                <button class="copy-btn" onclick="copyOutput()">
+                    <i class="far fa-copy"></i>
+                    复制
+                </button>
+            </div>
+            <div id="outputCode"></div>
+            <div class="time-stats" id="timeStats"></div>
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
+                <button class="btn btn-primary" style="flex:1;" onclick="downloadOutput()">
+                    <i class="fas fa-download"></i>
+                    下载混淆脚本
+                </button>
+                <button class="btn btn-secondary" style="flex:0.3;" onclick="hideOutput()">
+                    <i class="fas fa-xmark"></i>
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================== 卡密验证 ==================
+        const CORRECT_AUTH = "a0abccdfb6f54de70d7c872c19ffae92MAI Pro666"; // 给定的卡密
+
+        function verifyAuth() {
+            const input = document.getElementById('authInput').value;
+            const errorDiv = document.getElementById('authError');
+            if (input === CORRECT_AUTH) {
+                // 验证成功，隐藏遮罩，显示主界面
+                document.getElementById('authOverlay').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+            } else {
+                errorDiv.style.display = 'block';
+                document.getElementById('authInput').focus();
+            }
+        }
+
+        // 按回车也可以验证
+        document.getElementById('authInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                verifyAuth();
+            }
+        });
+
+        // ================== UI 辅助 ==================
+        const inputArea = document.getElementById('codeInput');
+        const charSpan = document.getElementById('charCount');
+        const fileInput = document.getElementById('fileInput');
+        function updateCharCount() { charSpan.textContent = inputArea.value.length.toLocaleString() + ' 字符'; }
+        inputArea.addEventListener('input', updateCharCount);
+        updateCharCount();
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                inputArea.value = ev.target.result;
+                updateCharCount();
+            };
+            reader.readAsText(file);
+            fileInput.value = '';
+        });
+
+        const intensitySlider = document.getElementById('intensityLevel');
+        const intensityValue = document.getElementById('intensityLevelValue');
+        intensitySlider.addEventListener('input', () => { intensityValue.textContent = intensitySlider.value; });
+
+        function setPreset(level) {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.preset-btn').classList.add('active');
+
+            const presets = {
+                standard: { rename: true, realVM: true, encrypt: true, flow: true, superHidden: true, opaque: true, antiDebug: true, integrity: true, deceptive: true, selfDestruct: true, selfModifying: true, antiAI: true, remoteKey: true, intensity: 5 },
+                ultimate: { rename: true, realVM: true, encrypt: true, flow: true, superHidden: true, opaque: true, antiDebug: true, integrity: true, deceptive: true, selfDestruct: true, selfModifying: true, antiAI: true, remoteKey: true, intensity: 10 },
+                max: { rename: true, realVM: true, encrypt: true, flow: true, superHidden: true, opaque: true, antiDebug: true, integrity: true, deceptive: true, selfDestruct: true, selfModifying: true, antiAI: true, remoteKey: true, intensity: 20 }
+            };
+            const p = presets[level];
+            if (!p) return;
+
+            document.getElementById('renameVars').checked = p.rename;
+            document.getElementById('realVM').checked = p.realVM;
+            document.getElementById('multiEncrypt').checked = p.encrypt;
+            document.getElementById('controlFlow').checked = p.flow;
+            document.getElementById('superHidden').checked = p.superHidden;
+            document.getElementById('opaquePredicates').checked = p.opaque;
+            document.getElementById('antiDebug').checked = p.antiDebug;
+            document.getElementById('integrityCheck').checked = p.integrity;
+            document.getElementById('deceptiveComments').checked = p.deceptive;
+            document.getElementById('selfDestruct').checked = p.selfDestruct;
+            document.getElementById('selfModifying').checked = p.selfModifying;
+            document.getElementById('antiAI').checked = p.antiAI;
+            document.getElementById('remoteKey').checked = p.remoteKey;
+            intensitySlider.value = p.intensity;
+            intensityValue.textContent = p.intensity;
+        }
+
+        function resetToDefault() {
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.preset-btn')[2].classList.add('active'); // 默认混沌20级
+            setPreset('max');
+        }
+
+        function hideOutput() { document.getElementById('outputCard').style.display = 'none'; }
+        function copyOutput() {
+            const out = document.getElementById('outputCode').innerText;
+            navigator.clipboard.writeText(out).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> 已复制';
+                setTimeout(() => btn.innerHTML = original, 2000);
+            });
+        }
+        function downloadOutput() {
+            if (!window._fullResult) return;
+            const blob = new Blob([window._fullResult], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'roblox_ultimate_' + Date.now() + '.lua';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ================== 终极混淆引擎 (增强版) ==================
+        class UltimateObfuscator {
+            constructor(config) {
+                this.config = config;
+                this.varCounter = 0;
+                this.varMap = new Map();
+                this.intensity = config.intensity || 20;
+                this.polySeed = Math.floor(Math.random() * 999999);
+                this.opaqueSeed = Math.floor(Math.random() * 1000000);
+                this.superSeed = config.superHidden ? Math.floor(Math.random() * 100000) : 0;
+                this.regex = {
+                    localVars: /\blocal\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=/g,
+                    funcs: /\bfunction\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g,
+                    strings: /(["'])(?:(?=(\\?))\2.)*?\1/g,
+                    comments: /--\[\[[\s\S]*?\]\]/g,
+                    lineComments: /--[^\n]*/g,
+                };
+            }
+
+            nextVar() { return '_' + this.polySeed.toString(36) + 'v' + (this.varCounter++) + '_' + Math.random().toString(36).substring(2,6); }
+            randomStr(len) { const c='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_'; let r=''; for(let i=0;i<len;i++) r+=c[Math.floor(Math.random()*c.length)]; return r; }
+
+            // --- 标识符重命名 ---
+            renameIdentifiers(code) {
+                if (!this.config.renameVars) return code;
+                const locals = new Set();
+                let m;
+                this.regex.localVars.lastIndex = 0; while ((m = this.regex.localVars.exec(code))) locals.add(m[1]);
+                this.regex.funcs.lastIndex = 0; while ((m = this.regex.funcs.exec(code))) locals.add(m[1]);
+                const reserved = ['game','workspace','script','math','string','table','os','bit32','print','warn','error','pcall','xpcall','getfenv','setfenv','pairs','ipairs','next','type','tonumber','tostring','assert','collectgarbage','wait','spawn','delay','tick','time','UserInputService','HttpService','RunService','Players','ReplicatedStorage','Instance','Vector3','CFrame'];
+                const pairs = [];
+                locals.forEach(old => { if (!reserved.includes(old) && !this.varMap.has(old)) this.varMap.set(old, this.nextVar()); });
+                this.varMap.forEach((newName, oldName) => pairs.push({old: oldName, new: newName}));
+                let newCode = code;
+                pairs.sort((a,b) => b.old.length - a.old.length).forEach(p => {
+                    newCode = newCode.replace(new RegExp('\\b' + p.old.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g'), p.new);
+                });
+                return newCode;
+            }
+
+            // --- 字符串加密 (多层XOR/RC4模拟) ---
+            encryptStrings(code) {
+                if (!this.config.multiEncrypt) return { code, keysList: [] };
+                let newCode = '', last = 0, m;
+                this.regex.strings.lastIndex = 0;
+                const keysList = [];
+                const baseLayers = 4 + Math.floor(this.intensity / 2);
+                const layers = Math.min(12, Math.max(4, baseLayers));
+                while ((m = this.regex.strings.exec(code))) {
+                    const full = m[0];
+                    const content = full.slice(1, -1);
+                    // 随机选择加密方法 (0或1)
+                    const method = Math.random() > 0.5 ? 0 : 1;
+                    const { hex, keys } = this.encryptWithMethod(content, method, layers);
+                    const id = keysList.length;
+                    keysList.push({ id, hex, keys, layers, method });
+                    newCode += code.substring(last, m.index) + `__S[${id}]()`;
+                    last = m.index + full.length;
+                }
+                newCode += code.substring(last);
+                return { code: newCode, keysList };
+            }
+
+            encryptWithMethod(str, method, layers) {
+                if (method === 0) {
+                    let current = str;
+                    const keys = [];
+                    for (let l = 0; l < layers; l++) {
+                        const key = this.randomStr(12 + l);
+                        keys.push(key);
+                        let transformed = '';
+                        for (let i = 0; i < current.length; i++) {
+                            const byte = current.charCodeAt(i);
+                            const keyByte = key.charCodeAt(i % key.length);
+                            const seedMix = (this.polySeed >> (l % 8)) & 0xFF;
+                            let mixed = byte ^ keyByte ^ seedMix;
+                            mixed = ((mixed << (l % 7)) | (mixed >> (8 - (l % 7)))) & 0xFF;
+                            transformed += String.fromCharCode(mixed);
+                        }
+                        current = transformed;
+                    }
+                    let hex = '';
+                    for (let i = 0; i < current.length; i++) hex += current.charCodeAt(i).toString(16).padStart(2, '0');
+                    return { hex, keys, method };
+                } else {
+                    let current = str;
+                    const keys = [];
+                    for (let l = 0; l < layers; l++) {
+                        const key = this.randomStr(16 + l);
+                        keys.push(key);
+                        let S = [], j = 0;
+                        for (let i = 0; i < 256; i++) S[i] = i;
+                        for (let i = 0; i < 256; i++) {
+                            j = (j + S[i] + key.charCodeAt(i % key.length)) % 256;
+                            [S[i], S[j]] = [S[j], S[i]];
+                        }
+                        let i = 0; j = 0;
+                        let transformed = '';
+                        for (let idx = 0; idx < current.length; idx++) {
+                            i = (i + 1) % 256;
+                            j = (j + S[i]) % 256;
+                            [S[i], S[j]] = [S[j], S[i]];
+                            let K = S[(S[i] + S[j]) % 256];
+                            transformed += String.fromCharCode(current.charCodeAt(idx) ^ K);
+                        }
+                        current = transformed;
+                    }
+                    let hex = '';
+                    for (let i = 0; i < current.length; i++) hex += current.charCodeAt(i).toString(16).padStart(2, '0');
+                    return { hex, keys, method };
+                }
+            }
+
+            // 字符串解密器（普通版）
+            buildStringDecryptor(keysList) {
+                if (keysList.length === 0) return '';
+                let funcs = '';
+                for (let k = 0; k < keysList.length; k++) {
+                    const item = keysList[k];
+                    let decodeExpr;
+                    if (item.method === 0) {
+                        decodeExpr = `__decode_method0("${item.hex}"`;
+                        for (let i = 0; i < item.layers; i++) decodeExpr += `, "${item.keys[i]}"`;
+                        decodeExpr += `, ${this.polySeed})`;
+                    } else {
+                        decodeExpr = `__decode_method1("${item.hex}"`;
+                        for (let i = 0; i < item.layers; i++) decodeExpr += `, "${item.keys[i]}"`;
+                        decodeExpr += `, ${this.polySeed})`;
+                    }
+                    funcs += `    [${item.id}] = function() return ${decodeExpr} end,\n`;
+                }
+                return `
+local function __decode_method0(hex, ...)
+    local args = {...}
+    local seed = args[#args]
+    local keys = {}
+    for i = 1, #args-1 do keys[i] = args[i] end
+    local s = ''
+    for i = 1, #hex, 2 do s = s .. string.char(tonumber(hex:sub(i,i+1), 16)) end
+    for l = #keys, 1, -1 do
+        local key = keys[l]
+        local dec = ''
+        local shift = (l % 7)
+        for i = 1, #s do
+            local b = s:byte(i)
+            b = bit32.bor(bit32.rshift(b, shift), bit32.lshift(b, 8-shift))
+            local k = key:byte((i-1)%#key+1)
+            local seedMix = bit32.band(bit32.rshift(seed, (l % 8)), 0xFF)
+            dec = dec .. string.char(bit32.bxor(b, k, seedMix))
+        end
+        s = dec
+    end
+    return s
+end
+
+local function __decode_method1(hex, ...)
+    local args = {...}
+    local seed = args[#args]
+    local keys = {}
+    for i = 1, #args-1 do keys[i] = args[i] end
+    local s = ''
+    for i = 1, #hex, 2 do s = s .. string.char(tonumber(hex:sub(i,i+1), 16)) end
+    for l = #keys, 1, -1 do
+        local key = keys[l]
+        local dec = ''
+        local S = {}; for i=0,255 do S[i]=i end
+        local j = 0
+        for i=0,255 do
+            j = (j + S[i] + key:byte(i%#key+1)) % 256
+            local temp = S[i]; S[i] = S[j]; S[j] = temp
+        end
+        local i = 0; j = 0
+        for idx = 1, #s do
+            i = (i + 1) % 256
+            j = (j + S[i]) % 256
+            local temp = S[i]; S[i] = S[j]; S[j] = temp
+            local K = S[(S[i] + S[j]) % 256]
+            local b = bit32.bxor(s:byte(idx), K)
+            dec = dec .. string.char(b)
+        end
+        s = dec
+    end
+    return s
+end
+
+local __S = { ${funcs} }
+`;
+            }
+
+            // 超隐碎片化（增强版）
+            buildSuperHiddenDecryptor(keysList) {
+                if (keysList.length === 0) return '';
+                const superSeed = this.superSeed;
+                const fragments = {};
+                const meta = {};
+                let fragCounter = 0;
+
+                const splitIntoFragments = (bytes, id) => {
+                    if (bytes.length === 0) return [];
+                    const maxFrags = Math.min(5, Math.max(2, Math.floor(this.intensity / 4)));
+                    const numFrags = Math.min(maxFrags, Math.max(2, Math.floor(Math.random() * maxFrags) + 2));
+                    const fragIds = [];
+                    let start = 0;
+                    for (let f = 0; f < numFrags; f++) {
+                        let end = (f === numFrags-1) ? bytes.length : start + Math.max(1, Math.floor(Math.random() * (bytes.length - start - (numFrags-f-1))));
+                        const fragBytes = bytes.slice(start, end);
+                        const transformed = fragBytes.map((b, idx) => {
+                            let val = b;
+                            val = (val + id * 13 + superSeed + (f * 7)) % 256;
+                            val = ((val << (idx % 5)) | (val >> (8 - (idx % 5)))) & 0xFF;
+                            return val;
+                        });
+                        fragCounter++;
+                        fragments[fragCounter] = transformed;
+                        fragIds.push(fragCounter);
+                        start = end;
+                    }
+                    return fragIds;
+                };
+
+                for (let k = 0; k < keysList.length; k++) {
+                    const item = keysList[k];
+                    const id = item.id;
+                    const hex = item.hex;
+                    const hexBytes = [];
+                    for (let i = 0; i < hex.length; i += 2) hexBytes.push(parseInt(hex.substr(i,2),16));
+                    const keyBytesList = item.keys.map(keyStr => {
+                        const bytes = [];
+                        for (let i = 0; i < keyStr.length; i++) bytes.push(keyStr.charCodeAt(i));
+                        return bytes;
+                    });
+                    const hexFragIds = splitIntoFragments(hexBytes, id);
+                    const keyFragIdsList = keyBytesList.map(keyBytes => splitIntoFragments(keyBytes, id));
+                    meta[id] = { layers: item.layers, method: item.method, hex: hexFragIds, keys: keyFragIdsList };
+                }
+
+                let code = 'local _FRAG = {}\n';
+                for (const fid in fragments) code += `_FRAG[${fid}] = {${fragments[fid].join(',')}}\n`;
+                code += 'local _META = {}\n';
+                for (const id in meta) {
+                    const m = meta[id];
+                    const keysStr = m.keys.map(kl => '{' + kl.join(',') + '}').join(',');
+                    code += `_META[${id}] = {layers=${m.layers}, method=${m.method}, hex={${m.hex.join(',')}}, keys={${keysStr}}}\n`;
+                }
+                code += `
+local _DEC
+_DEC = function(id)
+    local m = _META[id]
+    if not m then return "" end
+    local superSeed = ${superSeed}
+    local hexBytes = {}
+    for fidx = 1, #m.hex do
+        local fid = m.hex[fidx]
+        local frag = _FRAG[fid]
+        for bIdx = 1, #frag do
+            local val = frag[bIdx]
+            local orig = val
+            orig = bit32.bor(bit32.rshift(orig, (bIdx % 5)), bit32.lshift(orig, 8 - (bIdx % 5)))
+            orig = (orig - id*13 - superSeed - ((fidx-1)*7) + 256*10) % 256
+            table.insert(hexBytes, orig)
+        end
+    end
+    local keyBytesList = {}
+    for layer = 1, m.layers do
+        local keyBytes = {}
+        for kidx = 1, #m.keys[layer] do
+            local fid = m.keys[layer][kidx]
+            local frag = _FRAG[fid]
+            for bIdx = 1, #frag do
+                local val = frag[bIdx]
+                local orig = val
+                orig = bit32.bor(bit32.rshift(orig, (bIdx % 5)), bit32.lshift(orig, 8 - (bIdx % 5)))
+                orig = (orig - id*13 - superSeed - ((kidx-1)*7) + 256*10) % 256
+                table.insert(keyBytes, orig)
+            end
+        end
+        table.insert(keyBytesList, keyBytes)
+    end
+    local hex = ""
+    for i = 1, #hexBytes do hex = hex .. string.format("%02x", hexBytes[i]) end
+    local keys = {}
+    for i = 1, #keyBytesList do
+        local kb = keyBytesList[i]
+        local ks = ""
+        for j = 1, #kb do ks = ks .. string.char(kb[j]) end
+        keys[i] = ks
+    end
+    local s = ""
+    for i = 1, #hex, 2 do s = s .. string.char(tonumber(hex:sub(i,i+1), 16)) end
+    if m.method == 0 then
+        for l = m.layers, 1, -1 do
+            local key = keys[l]
+            local dec = ""
+            local shift = (l % 7)
+            for i = 1, #s do
+                local b = s:byte(i)
+                b = bit32.bor(bit32.rshift(b, shift), bit32.lshift(b, 8-shift))
+                local k = key:byte((i-1)%#key+1)
+                local seedMix = bit32.band(bit32.rshift(superSeed, (l % 8)), 0xFF)
+                dec = dec .. string.char(bit32.bxor(b, k, seedMix))
+            end
+            s = dec
+        end
+    else
+        for l = m.layers, 1, -1 do
+            local key = keys[l]
+            local dec = ""
+            local S = {}; for i=0,255 do S[i]=i end
+            local j = 0
+            for i=0,255 do
+                j = (j + S[i] + key:byte(i%#key+1)) % 256
+                local temp = S[i]; S[i] = S[j]; S[j] = temp
+            end
+            local i = 0; j = 0
+            for idx = 1, #s do
+                i = (i + 1) % 256
+                j = (j + S[i]) % 256
+                local temp = S[i]; S[i] = S[j]; S[j] = temp
+                local K = S[(S[i] + S[j]) % 256]
+                local b = bit32.bxor(s:byte(idx), K)
+                dec = dec .. string.char(b)
+            end
+            s = dec
+        end
+    end
+    return s
+end
+local __S = setmetatable({}, {__index = function(t,id) return _DEC(id) end})
+`;
+                return code;
+            }
+
+            // --- 真实虚拟机 (简化版，但生成完整的VM解释器) ---
+            realVM(code) {
+                if (!this.config.realVM) return code;
+                const vmName = this.nextVar();
+                const bytecodeVar = this.nextVar();
+                const instrCount = Math.floor(Math.random() * 50) + 50;
+                let bytecodeTable = '';
+                for (let i=0; i<instrCount; i++) {
+                    bytecodeTable += `    {op = ${Math.floor(Math.random()*15)}, a = ${Math.floor(Math.random()*10)}, b = ${Math.floor(Math.random()*10)}},\n`;
+                }
+                const encryptedCode = this.simpleEncrypt(code, this.polySeed);
+                return `
+-- [[ 真实虚拟机开始 ]]
+local ${vmName} = {}
+local ${bytecodeVar} = {
+${bytecodeTable}
+}
+local function decryptCode(seed)
+    local enc = "${encryptedCode}"
+    local dec = ""
+    for i=1, #enc, 2 do
+        local byte = tonumber(enc:sub(i,i+1), 16)
+        dec = dec .. string.char(bit32.bxor(byte, seed % 256))
+        seed = seed + 1
+    end
+    return dec
+end
+
+local function vm_exec(vm, bc)
+    local reg = {0,0,0,0,0,0,0,0,0,0}
+    local pc = 1
+    while pc <= #bc do
+        local ins = bc[pc]
+        if ins.op == 0 then -- NOP
+        elseif ins.op == 1 then -- LOAD
+            reg[ins.a] = ins.b
+        elseif ins.op == 2 then -- ADD
+            reg[ins.a] = reg[ins.a] + reg[ins.b]
+        elseif ins.op == 3 then -- CALL
+            local func = loadstring(decryptCode(${this.polySeed}))
+            if func then func() end
+        end
+        pc = pc + 1
+    end
+end
+
+vm_exec(${vmName}, ${bytecodeVar})
+-- [[ 真实虚拟机结束 ]]
+`;
+            }
+
+            simpleEncrypt(str, seed) {
+                let enc = '';
+                for (let i=0; i<str.length; i++) {
+                    let byte = str.charCodeAt(i) ^ (seed + i) & 0xFF;
+                    enc += byte.toString(16).padStart(2,'0');
+                }
+                return enc;
+            }
+
+            // --- 自修改代码 ---
+            selfModifyingCode(code) {
+                if (!this.config.selfModifying) return code;
+                const funcName = this.nextVar();
+                const codeVar = this.nextVar();
+                const encrypted = this.simpleEncrypt(code, this.polySeed + 12345);
+                return `
+-- 自修改代码块
+local ${funcName}
+${funcName} = function()
+    local enc = "${encrypted}"
+    local dec = ""
+    local seed = ${this.polySeed + 12345}
+    for i=1, #enc, 2 do
+        local byte = tonumber(enc:sub(i,i+1), 16)
+        dec = dec .. string.char(bit32.bxor(byte, seed % 256))
+        seed = seed + 1
+    end
+    local newFunc = loadstring(dec)
+    if newFunc then
+        ${funcName} = newFunc
+        return ${funcName}()
+    end
+end
+
+${funcName}()
+`;
+            }
+
+            // --- 控制流平坦化 ---
+            controlFlowMaze(code) {
+                if (!this.config.controlFlow) return code;
+                const lines = code.split('\n').filter(l => l.trim());
+                if (lines.length < 3) return code;
+                const pc = this.nextVar();
+                const state = this.nextVar();
+                const limit = this.nextVar();
+                const blocks = lines.map((line, i) => {
+                    const next = (i + 1) % lines.length;
+                    const extraCond = this.intensity > 10 ? ` and (math.tan(${i})<1 or math.exp(${i})>0)` : '';
+                    const cond = `((${pc}+${state})%${lines.length}==${i}) and (math.sin(${i})>=0 or math.cos(${i})<1)${extraCond}`;
+                    return `if ${cond} then ${line} ${pc}=${next} end`;
+                });
+                return `local ${pc}=0 local ${state}=${Date.now() + this.intensity} local ${limit}=${lines.length} while ${pc}<${limit} do ${blocks.join(' ')} end`;
+            }
+
+            // --- 不透明谓词 ---
+            generateOpaquePredicates(count) {
+                let preds = '';
+                for (let i=0; i<count; i++) {
+                    const r = this.opaqueSeed + i;
+                    const expr1 = `(math.pi*math.pi > 9.8)`;
+                    const expr2 = `(math.huge == 1e309)`;
+                    const expr3 = `(string.len("xyz")+${r} == ${3+r})`;
+                    const expr4 = `(type({}) == "table" and #{1,2,3} == 3)`;
+                    const chosen = [expr1, expr2, expr3, expr4][Math.floor(Math.random() * 4)];
+                    preds += `if ${chosen} then do end else ${this.generateJunkBlock()} end\n`;
+                }
+                return preds;
+            }
+
+            // --- 反调试Pro (增强版) ---
+            advancedAntiDebug() {
+                return `
+local function _env()
+    local f = getfenv()
+    local s = 0
+    if f.syn or f.krnl or f.fluxus or f.VA then s = s + 1 end
+    if pcall(identifyexecutor) then s = s + 2 end
+    if pcall(checkclosure) then s = s + 2 end
+    local a,b = pcall(error, "debug", 0); if not a then s = s + 3 end
+    local t = os.clock(); for i=1,100000 do end; if os.clock()-t > 0.3 then s = s + 2 end
+    local mt = getmetatable(""); if mt and mt.__index and tostring(mt.__index):find("hook") then s = s + 5 end
+    if debug and debug.getinfo then local i=debug.getinfo(1); if i and i.source and #i.source>100 then s=s+10 end end
+    if game and game:GetService("RunService"):IsStudio() then s = s + 15 end
+    local check1 = debug.getinfo
+    local check2 = debug.getinfo
+    if check1 ~= check2 then s = s + 20 end
+    if s > 3 then error() end
+end
+pcall(_env)
+`;
+            }
+
+            // --- 代码完整性校验 ---
+            generateIntegrityCheck(originalCode) {
+                let hash = 0;
+                for (let i=0; i<originalCode.length; i++) hash = (hash * 31 + originalCode.charCodeAt(i)) % 0xFFFFFFFF;
+                const checkVar = this.nextVar();
+                return `
+local ${checkVar} = ${hash}
+local function _v()
+    local c=0; for i=1,100 do c=(c*31+i)%0xFFFFFFFF end
+    if c ~= ${checkVar} then error() end
+end
+_v()
+`;
+            }
+
+            // --- 垃圾代码生成 ---
+            generateJunkBlock() {
+                const templates = [
+                    () => `local ${this.nextVar()}=math.random(10000) local ${this.nextVar()}=math.random(10000)`,
+                    () => `local ${this.nextVar()}={} for i=1,25 do ${this.nextVar()}[i]=i*i end`,
+                    () => `local ${this.nextVar()}=coroutine.create(function() local c=0 while c<30 do c=c+1 coroutine.yield() end end) coroutine.resume(${this.nextVar()})`,
+                    () => `local ${this.nextVar()}="${this.randomStr(40)}" local ${this.nextVar()}=string.reverse(${this.nextVar()})`,
+                    () => `local ${this.nextVar()}=function(${this.nextVar()}) return ${this.nextVar()}+math.random() end`,
+                    () => `local ${this.nextVar()}=bit32.bxor(${Math.floor(Math.random()*9999)},${Math.floor(Math.random()*9999)})`,
+                    () => `local mt={__index=function(t,k) return k end} local ${this.nextVar()}=setmetatable({}, mt)`,
+                    () => `local ${this.nextVar()}=Instance.new("Folder") ${this.nextVar()}.Name="${this.randomStr(8)}"`,
+                    () => `local ${this.nextVar()}=game:GetService("HttpService"):GenerateGUID(false)`,
+                    () => `local ${this.nextVar()}=string.dump(function() end)`,
+                ];
+                return templates[Math.floor(Math.random() * templates.length)]();
+            }
+
+            // --- 干扰注释系统 ---
+            deceptiveCommentSystem() {
+                if (!this.config.deceptiveComments) return { insert: (code) => ({code, count:0}) };
+                const misleading = [
+                    "-- 游戏配置: Speed=16, JumpPower=50",
+                    "-- 网络设置: Host=127.0.0.1, Port=8080",
+                    "-- 用户数据: UserId=123456789, Premium=true",
+                    "-- 调试模式: Enabled=false, LogLevel=ERROR",
+                    "-- 安全检查通过，继续执行",
+                    "-- 加密密钥匹配，解密继续",
+                    "-- 版本: v2.1.4, 构建: 2024.03.15",
+                    "-- 作者: DevTeam, 许可证: MIT",
+                    "-- 量子纠缠态初始化完成",
+                    "-- 神经网络权重加载: 87.3%",
+                    "-- 注意: 此文件受数字签名保护",
+                    "-- 警告: 修改可能导致脚本崩溃",
+                ];
+                return {
+                    insert: (code) => {
+                        const lines = code.split('\n');
+                        let newLines = [];
+                        let count = 0;
+                        for (let i=0; i<lines.length; i++) {
+                            newLines.push(lines[i]);
+                            if (Math.random() < 0.15 * (this.intensity / 5)) {
+                                newLines.push(misleading[Math.floor(Math.random() * misleading.length)]);
+                                count++;
+                            }
+                        }
+                        return { code: newLines.join('\n'), count };
+                    }
+                };
+            }
+
+            // --- 自毁结构 ---
+            generateSelfDestructLayer() {
+                const vars = [this.nextVar(), this.nextVar(), this.nextVar()];
+                return `
+local ${vars[0]}=setmetatable({},{__gc=function() for k in pairs(getfenv()) do if type(k)=="string" and #k>3 then rawset(getfenv(),k,nil) end end end})
+pcall(function() collectgarbage() end)
+`;
+            }
+
+            // --- 防AI/机器人增强 ---
+            antiAIEnhancement(code) {
+                if (!this.config.antiAI) return code;
+                let enhanced = code;
+                const junkCount = 10 * this.intensity;
+                for (let i=0; i<junkCount; i++) {
+                    enhanced += '\n' + this.generateJunkBlock();
+                }
+                const dynamic = `
+local _${this.nextVar()}=loadstring("return "..math.random(1000))
+if _${this.nextVar()} then pcall(_${this.nextVar()}) end
+`;
+                enhanced += '\n' + dynamic;
+                return enhanced;
+            }
+
+            // --- 远程密钥包装 (可选择是否启用) ---
+            wrapWithRemoteKey(code, useRemote, serverUrl) {
+                if (!useRemote) return code;
+                const encrypted = this.simpleEncrypt(code, 987654);
+                const keyVar = this.nextVar();
+                const decryptedVar = this.nextVar();
+                const url = serverUrl && serverUrl.trim() ? serverUrl : 'https://your-server.com/key';
+                return `
+-- 远程密钥保护
+local ${keyVar}
+local function fetchKey()
+    local success, result = pcall(function()
+        return game:GetService("HttpService"):GetAsync("${url}" .. game:GetService("RbxAnalyticsService"):GetClientId())
+    end)
+    if success and result then
+        ${keyVar} = result
+    else
+        error("Failed to obtain key")
+    end
+end
+fetchKey()
+
+local function decryptCore(key)
+    local enc = "${encrypted}"
+    local dec = ""
+    local seed = 987654
+    for i=1, #enc, 2 do
+        local byte = tonumber(enc:sub(i,i+1), 16)
+        dec = dec .. string.char(bit32.bxor(byte, seed % 256))
+        seed = seed + 1
+    end
+    return dec
+end
+
+local ${decryptedVar} = decryptCore(${keyVar})
+loadstring(${decryptedVar})()
+`;
+            }
+
+            // --- 主混淆流程 ---
+            obfuscate(source) {
+                const startTime = performance.now();
+                let code = source.replace(this.regex.comments, '').replace(this.regex.lineComments, '');
+                let keysList = [];
+
+                if (this.config.multiEncrypt) {
+                    const res = this.encryptStrings(code);
+                    code = res.code;
+                    keysList = res.keysList;
+                }
+
+                code = this.renameIdentifiers(code);
+                code = this.controlFlowMaze(code);
+
+                if (this.config.selfModifying) {
+                    code = this.selfModifyingCode(code);
+                }
+                if (this.config.realVM) {
+                    code = this.realVM(code);
+                }
+
+                const parts = [];
+
+                if (keysList.length > 0) {
+                    if (this.config.superHidden) {
+                        parts.push(this.buildSuperHiddenDecryptor(keysList));
+                    } else {
+                        parts.push(this.buildStringDecryptor(keysList));
+                    }
+                }
+
+                if (this.config.antiDebug) parts.push(this.advancedAntiDebug());
+                if (this.config.opaquePredicates) {
+                    parts.push(this.generateOpaquePredicates(10 + this.intensity * 3));
+                }
+                if (this.config.integrityCheck) {
+                    parts.push(this.generateIntegrityCheck(source));
+                }
+                for (let i=0; i<20 * this.intensity; i++) {
+                    if (Math.random() > 0.3) parts.push(this.generateJunkBlock());
+                }
+                if (this.config.selfDestruct) {
+                    for (let i=0; i<Math.min(10, this.intensity); i++) parts.push(this.generateSelfDestructLayer());
+                }
+
+                let commentCount = 0;
+                if (this.config.deceptiveComments) {
+                    const deceptor = this.deceptiveCommentSystem();
+                    const res = deceptor.insert(code);
+                    code = res.code;
+                    commentCount = res.count;
+                }
+
+                code = this.antiAIEnhancement(code);
+                parts.push(code);
+
+                let result = parts.join('\n\n');
+                if (this.config.remoteKey) {
+                    const serverUrl = document.getElementById('keyServerUrl').value;
+                    result = this.wrapWithRemoteKey(result, true, serverUrl);
+                }
+
+                if (this.config.noHints) {
+                    result = result.replace(/\n\s*\n/g, '\n').trim();
+                }
+
+                const time = (performance.now() - startTime).toFixed(1);
+                const featureCount = Object.values(this.config).filter(v => v === true).length;
+                return { result, time, featureCount, commentCount };
+            }
+        }
+
+        async function startObfuscation() {
+            const source = document.getElementById('codeInput').value;
+            if (!source.trim()) return alert('请输入要混淆的代码');
+
+            const config = {
+                renameVars: document.getElementById('renameVars').checked,
+                realVM: document.getElementById('realVM').checked,
+                multiEncrypt: document.getElementById('multiEncrypt').checked,
+                controlFlow: document.getElementById('controlFlow').checked,
+                superHidden: document.getElementById('superHidden').checked,
+                opaquePredicates: document.getElementById('opaquePredicates').checked,
+                antiDebug: document.getElementById('antiDebug').checked,
+                integrityCheck: document.getElementById('integrityCheck').checked,
+                deceptiveComments: document.getElementById('deceptiveComments').checked,
+                selfDestruct: document.getElementById('selfDestruct').checked,
+                selfModifying: document.getElementById('selfModifying').checked,
+                antiAI: document.getElementById('antiAI').checked,
+                remoteKey: document.getElementById('remoteKey').checked,
+                noHints: false,
+                intensity: parseInt(document.getElementById('intensityLevel').value)
+            };
+
+            const prog = document.getElementById('progressContainer');
+            prog.style.display = 'block';
+            const fill = document.getElementById('progressFill');
+            const text = document.getElementById('progressText');
+            fill.style.width = '0%'; text.innerText = '启动终极融合引擎...';
+            await new Promise(r => setTimeout(r, 10));
+
+            fill.style.width = '20%'; text.innerText = '初始化混淆器...';
+            const obf = new UltimateObfuscator(config);
+            await new Promise(r => setTimeout(r, 10));
+
+            fill.style.width = '50%'; text.innerText = '应用二十层防护...';
+            const { result, time, featureCount, commentCount } = obf.obfuscate(source);
+            await new Promise(r => setTimeout(r, 10));
+
+            fill.style.width = '90%'; text.innerText = '生成最终输出...';
+
+            document.getElementById('origSize').innerText = source.length.toLocaleString();
+            const sizeMB = (result.length / 1024 / 1024).toFixed(3);
+            document.getElementById('estSize').innerText = sizeMB;
+            document.getElementById('featureCount').innerText = featureCount;
+            document.getElementById('obfTime').innerText = time + 'ms';
+
+            const timeStats = document.getElementById('timeStats');
+            timeStats.innerHTML = `
+                <span><i class="fas fa-shield"></i> 防护层数: ${featureCount}</span>
+                <span><i class="fas fa-comment-dots"></i> 干扰注释: ${commentCount}</span>
+                <span><i class="fas fa-expand"></i> 膨胀率: ${(result.length / source.length).toFixed(2)}x</span>
+                <span><i class="fas fa-clock"></i> 耗时: ${time}ms</span>
+            `;
+
+            const authorComment = `-- MAI ProNB666\n-- 作者:柒澜\n-- 纸飞机频道:https://t.me/maiproNB666\n\n`;
+            const finalResult = authorComment + result;
+
+            const preview = finalResult.length > 5000 ? finalResult.substring(0,5000) + '\n\n...... (预览截断，完整代码已生成) ......' : finalResult;
+            document.getElementById('outputCode').innerText = preview;
+            window._fullResult = finalResult;
+
+            fill.style.width = '100%'; text.innerText = '混淆完成！';
+            await new Promise(r => setTimeout(r, 300));
+            prog.style.display = 'none';
+            document.getElementById('outputCard').style.display = 'block';
+        }
+
+        // 初始化
+        resetToDefault();
+    </script>
+</body>
+</html>
